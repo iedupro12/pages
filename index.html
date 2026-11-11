@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Post Card Generator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app">
+
+    <aside class="panel" id="panel">
+      <header class="brand">
+        <h1>Post Card Generator</h1>
+      </header>
+
+      <div class="field">
+        <span class="label">Theme <small id="themeName"></small></span>
+        <div class="themes" id="themes" role="group" aria-label="Card theme"></div>
+      </div>
+
+      <div class="field">
+        <span class="label">Topic</span>
+        <div class="seg" id="topicSeg" role="group" aria-label="Topic mode">
+          <button type="button" data-v="random" aria-pressed="true">Random 100</button>
+          <button type="button" data-v="custom" aria-pressed="false">Custom</button>
+        </div>
+        <textarea id="topic" rows="2" hidden placeholder="Example: daily talk with was and were"></textarea>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <span class="label">Lines</span>
+          <div class="seg" id="countSeg" role="group" aria-label="Number of lines"></div>
+        </div>
+        <div class="field" id="markerField">
+          <span class="label">Marker</span>
+          <div class="seg" id="styleSeg" role="group" aria-label="Line marker">
+            <button type="button" data-v="mark" aria-pressed="true" aria-label="X mark">&#x203B;</button>
+            <button type="button" data-v="num" aria-pressed="false" class="bn" aria-label="Numbers">&#x09E7;.</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="fontSel">Bangla font</label>
+        <select id="fontSel"></select>
+      </div>
+
+      <div class="field" id="charField">
+        <span class="label">Character <small id="charName"></small></span>
+        <div class="chars" id="chars"></div>
+      </div>
+
+      <details class="acc" id="editBox">
+        <summary>Edit text</summary>
+        <div class="acc-body">
+          <div class="field" id="titleField">
+            <label class="label" for="titleIn">Title</label>
+            <input id="titleIn" type="text" spellcheck="false">
+          </div>
+          <div class="field" id="footerField">
+            <label class="label" for="footerIn">Footer <small>Latin words turn red</small></label>
+            <input id="footerIn" type="text" spellcheck="false">
+          </div>
+          <div class="field">
+            <label class="label" for="editor">Lines <small>Bangla | English</small></label>
+            <textarea id="editor" class="mono" rows="7" spellcheck="false"></textarea>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc" id="bulkBox">
+        <summary>Bulk <small>new topic each</small></summary>
+        <div class="acc-body">
+          <div class="bulk-row">
+            <input id="bulkCount" type="number" min="1" max="100" value="10" inputmode="numeric" aria-label="Number of cards">
+            <button class="btn dark" id="bulkBtn" type="button">Generate batch</button>
+          </div>
+          <div class="progress"><i id="bulkBar"></i></div>
+          <div class="bulk-meta"><span id="bulkText">Idle</span><span id="bulkFail"></span></div>
+          <div class="bulk-actions">
+            <button class="btn" id="bulkStop" type="button" disabled>Stop</button>
+            <button class="btn" id="bulkZip" type="button" disabled>Download ZIP</button>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc" id="apiBox">
+        <summary>API &amp; advanced</summary>
+        <div class="acc-body">
+          <div class="field">
+            <label class="label" for="apiKey">Gemini API key</label>
+            <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your key">
+          </div>
+          <div class="field">
+            <label class="label" for="model">Model</label>
+            <input id="model" type="text" value="gemini-3.8-live" spellcheck="false" autocapitalize="off">
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label class="label" for="delay">Wait <small>ms</small></label>
+              <input id="delay" type="number" min="0" max="5000" step="100" value="1500" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label class="label" for="gap">Batch gap <small>ms</small></label>
+              <input id="gap" type="number" min="0" max="10000" step="250" value="1000" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc" id="logBox">
+        <summary>Log</summary>
+        <div class="acc-body">
+          <div class="status" id="status" aria-live="polite"><ol id="log"></ol></div>
+        </div>
+      </details>
+    </aside>
+
+    <main class="stage">
+      <div class="view" id="view">
+        <div class="sheet" id="sheet"><canvas id="card" width="1080" height="1350"></canvas></div>
+      </div>
+
+      <p class="topicline" id="topicShown"></p>
+      <div class="gallery" id="gallery" aria-label="Generated cards"></div>
+
+      <div class="dock">
+        <p class="statusline" id="statusLine" aria-live="polite"></p>
+        <div class="dock-row">
+          <button class="btn primary grow" id="genBtn" type="button">Generate</button>
+          <button class="btn" id="shuffleBtn" type="button" title="Another character">Shuffle</button>
+          <button class="btn dark" id="dlBtn" type="button">PNG</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="js/assets-data.js"></script>
+  <script src="js/topics.js"></script>
+  <script src="js/samples.js" charset="utf-8"></script>
+  <script src="js/zip.js"></script>
+  <script src="js/card.js" charset="utf-8"></script>
+  <script src="js/live.js"></script>
+  <script src="js/app.js" charset="utf-8"></script>
+</body>
+</html>
